@@ -1,0 +1,66 @@
+<div class="container">
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <form (ngSubmit)="filterEmployees()" class="form-inline my-4">
+                <div class="form-group">
+                    <input type="text" class="form-control" [(ngModel)]="searchString" name="searchString"
+                    placeholder="search by" (input)="filterEmployees()" required>
+                </div>
+                <div class="form-group">
+                    <select name="searchType" id="searchType" class="form-control" [(ngModel)]="searchType">
+                        <option value="email">Email</option>
+                        <option value="firstName">FirstName</option>
+                        <option value="lastName">LastName</option>
+                        <option value="id">Id</option>
+                    </select>
+                </div>
+                <button class="btn btn-info" [disabled]="searchString === ''">
+                    Search
+                </button>
+            </form>
+        </div>
+    </div>
+    <div class="row align-items-center">
+        <div class="col-12">
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                    <th scope="row">#</th>
+                    <th>Employee id</th>
+                    <th>
+                        <!-- <button class="btn-btn-primary" (click)="sortFirstName()"> -->
+                            First name
+                        <!-- </button> -->
+                    </th>
+                    <th>Last time</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let employee of pageOfItems; let i = index">
+                        <th scope="row">{{i}}</th>
+                        <td>{{ employee.id }}</td>
+                        <td>{{ employee.firstName }}</td>
+                        <td>{{ employee.lastName }}</td>
+                        <td>{{ employee.email }}</td>
+                        <td><button class="btn btn-info" (click)="editEmployee(employee)">
+                            <i class="fa fa-pencil-square-o"></i></button> | <button class="btn btn-danger" (click)="deleteEmployee(employee.id)"><i class="fa fa-trash-o"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row justify-content-left">
+        <div class="col-6">
+                <jw-pagination [items]="employees" (changePage)="onChangePage($event)" [pageSize]="7"></jw-pagination>
+        </div>
+    </div>
+    <div class="row" *ngIf="editMode && selectedEmployee !== null">
+        <div class="col-12">
+            <hr>
+            <h4 class="text-muted">Update employee details</h4>
+            <hr>
+            <app-employee-edit [employee]="selectedEmployee" (submitted)="switchEditMode()"></app-employee-edit>
+        </div>
+    </div>
+</div>
